@@ -10,7 +10,9 @@ $(document).ready(function() {
  */
 function initializePage() {
 	$('.project a').click(addProjectDetails);
-
+	$("#testjs").click(function(e){
+		$.get("/project/random", addProject);
+	})
 	// $('#colorBtn').click(randomizeColors);
 }
 
@@ -27,4 +29,22 @@ function addProjectDetails(e) {
 	var idNumber = projectID.substr('project'.length);
 
 	console.log("User clicked on project " + idNumber);
+
+	var endpoint = "/project/".concat(idNumber);
+	console.log(endpoint);
+	
+	$.get(endpoint, callback);
+}
+
+function callback(result){
+	//console.log(result);
+	var projectID = result.id;
+	var projectEle = "#project".concat(projectID ," .thumbnail .details");
+
+	var date = "<p>".concat(result.date,"</p>");
+	var title = "<p>".concat(result.title,"</p>");
+	var image = "<img class=".concat( " \"detailsImage\"" , "src = \"", result.image, "\">");
+
+	var htmlString = image.concat(title, date, result.summary)
+	$(projectEle).html(htmlString);
 }
